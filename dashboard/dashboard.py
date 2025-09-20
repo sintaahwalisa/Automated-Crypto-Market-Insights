@@ -4,6 +4,27 @@ import plotly.express as px
 import os
 import streamlit.components.v1 as components
 from datetime import datetime
+import math
+
+def format_number_simple(value):
+    """Formats a number to a simple string with K, M, B, T, Q suffix."""
+    if value == 0:
+        return "0"
+    
+    # Define suffixes and their corresponding powers of 1000
+    suffixes = ["", "K", "M", "B", "T", "Q"]
+    
+    # Determine the appropriate suffix index
+    magnitude = 0
+    if value > 0:
+        magnitude = int(math.log10(value) // 3)
+    
+    # Calculate the scaled value and format it
+    scaled_value = value / (1000 ** magnitude)
+    
+    # Use f-string to format to one decimal place and add the suffix
+    return f"{scaled_value:.1f} {suffixes[magnitude]}"
+
 
 # =======================================================================
 # --- FUNCTIONS TO LOAD DATA FROM LOCAL/GITHUB FILE ---
@@ -45,7 +66,7 @@ def load_latest_data():
 # --- STREAMLIT DASHBOARD CONFIGURATION ---
 # =======================================================================
 st.set_page_config(
-    page_title="Crypto Coin Market Cap Analytics Dashboard",
+    page_title="Crypto Analytics Dashboard",
     layout="wide",
     initial_sidebar_state="expanded",
     page_icon="img-resources/icon website.png"
@@ -61,62 +82,66 @@ html {
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 body {
     font-family: 'Inter', sans-serif;
+    background-color: #000000;
+    color: #ffffff;
 }
+
+/* Global Styles */
 .main {
-    background-color: #1a1a2e;
-    color: #fff;
+    background-color: #000000;
+    color: #ffffff;
 }
 .sidebar .sidebar-content {
-    background-color: #162447;
+    background-color: #253900;
     padding-top: 2rem;
 }
-h1, h2, h3, h5 {
-    color: #a4f5d8;
+
+/* Titles */
+h1, h2, h3, .st-emotion-cache-121p6b5, .st-emotion-cache-1632f05, .st-emotion-cache-1g8w4t4 {
+    color: #08cb00;
 }
-.metric-card {
-    background-color: #1f4068;
+
+/* Containers (Boxes) */
+/* This will now adapt based on theme */
+.stContainer {
     padding: 1.5rem;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     height: 100%;
 }
-.sub-metric-card {
-    background-color: #2c3e50;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-top: 1rem;
-    height: 100%;
+
+/* Specific styling for list items inside containers */
+/* Removed hardcoded black color */
+.key-coin-list-item .gain {
+    color: #28a745 !important;
 }
-.chart-container {
-    background-color: #1f4068;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.key-coin-list-item .loss {
+    color: #dc3545 !important;
 }
+.key-coin-list-item .trend-icon {
+    color: #28a745 !important;
+}
+
+/* Other Styles */
 .social-icons a {
-    color: #fff;
+    /* Removed color: #ffffff; to make it dynamic */
     margin-right: 15px;
     font-size: 36px;
     text-decoration: none;
-    /* Updated transition for the new effect */
     transition: transform 0.3s ease;
 }
 .social-icons a:hover {
-    /* New hover effect: icon scales up */
     transform: scale(1.2);
 }
-.key-coin-list-item {
-    padding: 8px 0;
+.change-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
-.key-coin-list-item h5 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: #fff;
-}
-.key-coin-list-item p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #ccc;
+.flex-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .gain {
     color: #28a745;
@@ -124,18 +149,8 @@ h1, h2, h3, h5 {
 .loss {
     color: #dc3545;
 }
-.change-container {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
 .trend-icon {
     font-size: 1rem;
-}
-.flex-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 /* Keyframes for animations */
 @keyframes fadeInUp {
@@ -169,9 +184,10 @@ h1, h2, h3, h5 {
 .stContainer {
     animation: fadeIn 0.5s ease-out forwards;
 }
+
 /* Style for button hover */
 .stButton>button {
-    background-color: #162447;
+    background-color: #253900;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -179,16 +195,16 @@ h1, h2, h3, h5 {
     transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 .stButton>button:hover {
-    background-color: #1f4068;
+    background-color: #08cb00;
     transform: scale(1.05) rotate(-1deg);
-    box-shadow: 0 0 10px #a4f5d8;
+    box-shadow: 0 0 10px #08cb00;
 }
 /* Style for expander (for customization options) */
 .st-expander {
     transition: all 0.3s ease;
 }
 .st-expander:hover {
-    background-color: #1f4068;
+    background-color: #2c3e50;
     border-radius: 8px;
 }
 .st-expander-header {
@@ -211,6 +227,16 @@ h1, h2, h3, h5 {
     .stMetric {
         font-size: 0.9rem;
     }
+    /* FIX: Make containers and charts fluid on mobile */
+    .stContainer {
+        width: 100% !important;
+    }
+    .stPlotlyChart {
+        width: 100% !important;
+        /* Ensure inner chart elements also respect the container width */
+        max-width: 100%;
+        overflow-x: auto; /* Adds horizontal scroll if content is too wide */
+    }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -220,7 +246,7 @@ h1, h2, h3, h5 {
 # --- DASHBOARD UI STRUCTURE ---
 # =======================================================================
 
-st.title("Crypto Coin Market Cap Analytics Dashboard")
+st.title("Crypto Analytics Dashboard")
 st.markdown("### by Michael Vincent Sebastian Handojo")
 st.markdown("""
 <div class="social-icons">
@@ -240,22 +266,26 @@ st.markdown("""
 
 st.image("https://images.unsplash.com/photo-1640161704729-cbe966a08476?q=80&w=872&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", use_container_width=True)
 
-if st.button("Refresh Data", help="Fetch the latest data from the CSV file"):
+if st.button("Refresh", help="Fetch the latest data from the CSV file"):
     st.cache_data.clear()
     st.rerun()
 
 # Load latest data
 df_latest = load_latest_data()
 
+# --- Mengatur nilai default untuk multiselect ---
+default_comparison_coins = ['BTC', 'ETH', 'SOL']
 
 with st.sidebar:
-    with st.expander("Customization Options"):
+    with st.expander("Options"):
         if not df_latest.empty:
             coin_options = df_latest['symbol'].tolist()
+            # Set default value to 'BTC', 'ETH', 'SOL' if they exist in the data
+            default_selected = [coin for coin in default_comparison_coins if coin in coin_options]
             selected_coins = st.multiselect(
                 "Select Coins for Comparison:",
                 options=coin_options,
-                default=coin_options[:3] if len(coin_options) >= 3 else coin_options
+                default=default_selected
             )
 
             # Map user-friendly names to actual column names
@@ -273,10 +303,12 @@ with st.sidebar:
             # Get the internal column name from the selected display name
             selected_metric_internal = metric_map[selected_display_metric]
 
+            # Set default value for historical chart to 'BTC'
+            default_historical_coin_index = coin_options.index('BTC') if 'BTC' in coin_options else 0
             selected_coin_historical = st.selectbox(
                 "Select Coin for Historical Chart:",
                 options=coin_options,
-                index=0 # Default to the first coin
+                index=default_historical_coin_index
             )
 
         else:
@@ -287,11 +319,9 @@ if not df_latest.empty:
     last_updated_dt = df_latest['last_updated'].max() if 'last_updated' in df_latest.columns else None
 
     if last_updated_dt:
-        # Format the datetime object to a user-friendly string in UTC
-        formatted_date = last_updated_dt.strftime("%Y-%m-%d")
-        formatted_time = last_updated_dt.strftime("%H:%M")
-
-        readable_string = f"Data last updated on **{formatted_date}** at **{formatted_time} (UTC+00:00)**."
+        formatted_string = last_updated_dt.strftime("%d %B %Y at %H:%M")
+        
+        readable_string = f"Last update: {formatted_string} (UTC+0)."
     else:
         readable_string = "Data update status is not available."
 
@@ -299,12 +329,12 @@ if not df_latest.empty:
 
 # --- Dashboard Overview Section ---
 st.markdown("---")
-st.subheader("Overview Dashboard")
+st.subheader("Overview")
 st.info("Note: This dashboard is automatically updated every 6 minutes by a GitHub Actions workflow. The data shown will always be the most recent!")
 
 # --- Aggregate Data Section ---
 st.markdown("---")
-st.subheader("Aggregate Data Summary")
+st.subheader("Global Market Metrics")
 if not df_latest.empty:
     # Combine the metrics into a single container
     with st.container(border=True):
@@ -314,15 +344,15 @@ if not df_latest.empty:
         # Use columns to place them side-by-side within the container
         agg_col1, agg_col2 = st.columns(2)
         with agg_col1:
-            st.metric(label="Total Trading Volume (24h)", value=f"${total_volume:,.2f}")
+            st.metric(label="Total Trading Volume (24h)", value=f"${format_number_simple(total_volume)}")
         with agg_col2:
-            st.metric(label="Total Market Cap", value=f"${total_market_cap:,.2f}")
+            st.metric(label="Total Market Cap", value=f"${format_number_simple(total_market_cap)}")
 else:
     st.warning("Data not available for aggregation.")
 
 # --- Updated Key Coin Metrics Section (New Card-Style Layout) ---
 st.markdown("---")
-st.subheader("Key Coin Analysis")
+st.subheader("Market Highlights")
 if not df_latest.empty:
     # Top 5 Daily Gainers and Losers
     top_gainers = df_latest.sort_values(by='percent_change_24h', ascending=False).head(5)
@@ -372,12 +402,13 @@ if not df_latest.empty:
         with st.container(border=True):
             st.markdown("<h5>Top 5 Trading Volume</h5>", unsafe_allow_html=True)
             for _, row in top_volume.iterrows():
+                formatted_volume = format_number_simple(row['volume_24h'])
                 st.markdown(f"""
                 <div class="key-coin-list-item flex-row">
                     <div>
                         <h5>{row['name']} ({row['symbol']})</h5>
                     </div>
-                    <p>${row['volume_24h']:.2f}</p>
+                    <p>${formatted_volume}</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
@@ -385,21 +416,21 @@ if not df_latest.empty:
         with st.container(border=True):
             st.markdown("<h5>Top 5 Biggest Market Cap</h5>", unsafe_allow_html=True)
             for _, row in top_market_cap_list.iterrows():
+                formatted_market_cap = format_number_simple(row['market_cap'])
                 st.markdown(f"""
                 <div class="key-coin-list-item flex-row">
                     <div>
                         <h5>{row['name']} ({row['symbol']})</h5>
                     </div>
-                    <p>${row['market_cap']:.2f}</p>
+                    <p>${formatted_market_cap}</p>
                 </div>
                 """, unsafe_allow_html=True)
 
 # --- Data Visualization Section ---
 st.markdown("---")
-st.subheader("Crypto Data Visualization")
+st.subheader("Coin Metrics Comparison")
 if not df_latest.empty:
     with st.container(border=True):
-        st.markdown("<h4>Comparison of Selected Coin Metrics</h4>", unsafe_allow_html=True)
         if selected_coins:
             selected_data = df_latest[df_latest['symbol'].isin(selected_coins)]
             # Use the internal metric name for the plot's y-axis
@@ -422,7 +453,7 @@ if not df_latest.empty:
 
     # NEW SECTION: Embed TradingView Historical Chart
     st.markdown("---")
-    st.subheader("Historical Price Chart (via TradingView)")
+    st.subheader("Historical Price Chart")
     st.info("This chart is embedded from TradingView and displays complete historical data in real-time.")
     if selected_coin_historical:
         tv_symbol = f"BINANCE:{selected_coin_historical}USDT"
@@ -440,7 +471,7 @@ if not df_latest.empty:
           "symbol": "{tv_symbol}",
           "interval": "D",
           "timezone": "Etc/UTC",
-          "theme": "dark",
+          "theme": "light",
           "style": "1",
           "locale": "en",
           "toolbar_bg": "#f1f3f6",
@@ -460,7 +491,7 @@ if not df_latest.empty:
 
 # --- DATA TABLE SECTION ---
 st.markdown("---")
-st.subheader("Crypto Data Table")
+st.subheader("Data Table")
 if not df_latest.empty:
     st.dataframe(df_latest.sort_values(by='cmc_rank', ascending=True)[[
         'cmc_rank', 'name', 'symbol', 'price', 'market_cap', 'volume_24h', 'percent_change_24h', 'last_updated'
