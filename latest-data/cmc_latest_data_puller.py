@@ -65,7 +65,7 @@ def clean_and_format_data(raw_data):
     return df_cleaned
 
 # Fungsi untuk menyimpan data, mode overwrite
-def save_updated_data(df, file_path='cleaning/updated_file.csv'):
+def save_updated_data(df, file_path='latest-data/latest_data.csv'):
     """
     Menyimpan DataFrame ke file CSV dengan menimpa (overwrite) file yang sudah ada.
     """
