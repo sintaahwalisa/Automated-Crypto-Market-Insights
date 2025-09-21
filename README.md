@@ -43,7 +43,7 @@ automated-crypto-market/
 ├── dashboard/
 │   └── dashboard.py                      # Streamlit dashboard application
 ├── img-resources/
-│   └── icon-website.png                  # Dashboard assets
+│   └── icon-website.png                  # favicon assets
 ├── latest-data/
 │   ├── cmc_latest_data_puller.py        # API data fetcher
 │   └── latest_data.csv                   # Current market snapshot
