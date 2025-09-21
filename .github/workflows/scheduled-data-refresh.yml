@@ -41,7 +41,7 @@ jobs:
       # Langkah 4: Menjalankan skrip Python untuk mengambil dan memperbarui data.
       # Skrip ini diharapkan membuat atau memperbarui file 'cleaning/updated_file.csv'.
       - name: Run data fetching script
-        run: python cleaning/data_cleaner_and_puller.py
+        run: python latest-data/cmc_latest_data_puller.py
         env:
           # Mengakses secret API key yang sudah Anda simpan di GitHub.
           CMC_PRO_API_KEY: ${{ secrets.CMC_PRO_API_KEY }}
@@ -56,7 +56,7 @@ jobs:
           # Ini adalah parameter khusus untuk pesan.
           commit_message: "Automated update of top 100 crypto data [skip ci]"
           # Menentukan file yang akan di-commit.
-          file_pattern: 'cleaning/updated_file.csv'
+          file_pattern: 'latest-data/latest_data.csv'
           # Memindahkan opsi tambahan ke sini agar tidak bentrok dengan pesan commit.
           # '--no-verify' dan '--signoff' adalah contoh opsi yang bisa Anda tambahkan.
           commit_options: '--no-verify --signoff'

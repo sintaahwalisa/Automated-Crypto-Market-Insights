@@ -36,7 +36,7 @@ def load_latest_data():
     This function is now designed to work with a CSV that may contain historical data,
     but it only returns the most recent entry for each coin for the main dashboard metrics.
     """
-    file_path = 'cleaning/updated_file.csv'
+    file_path = 'latest-data/latest_data.csv'
     
     if not os.path.exists(file_path):
         st.error(f"File '{file_path}' not found. Make sure you have uploaded it to the root of your GitHub repository.")
