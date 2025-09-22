@@ -2,9 +2,15 @@
 
 A robust, automated cryptocurrency data pipeline that collects, analyzes, and visualizes real-time market data from CoinMarketCap API. Built with Python, automated via GitHub Actions, and deployed on Streamlit Cloud.
 
+### **[Streamlit Dashboard 🌐](https://coinmarketcapanalyticsdashboard.streamlit.app/)**
+
+---
+
 ## 🎯 What This Does
 
 This system automatically fetches cryptocurrency market data every 6 minutes, processes it, and presents it through an interactive web dashboard - all without manual intervention. Think of it as your personal crypto market analyst that never sleeps.
+
+---
 
 ## 🚀 Key Features
 
@@ -13,6 +19,8 @@ This system automatically fetches cryptocurrency market data every 6 minutes, pr
 - **Zero Maintenance**: Fully automated workflow using GitHub Actions
 - **Professional Analytics**: Market metrics, top gainers/losers, volume leaders
 - **Historical Analysis**: Integrated TradingView charts for technical analysis
+
+---
 
 ## 🛠️ Tech Stack
 
@@ -24,6 +32,8 @@ This system automatically fetches cryptocurrency market data every 6 minutes, pr
 | **Dashboard** | Streamlit | Interactive web interface |
 | **Deployment** | Streamlit Cloud | Free hosting with auto-sync |
 | **Storage** | GitHub Repository | Version-controlled data storage |
+
+---
 
 ## 📁 Project Structure
 
@@ -52,6 +62,8 @@ automated-crypto-market/
 ├── requirements.txt                       # Python dependencies
 └── README.md
 ```
+
+---
 
 ## 🔄 How It Works
 
@@ -93,6 +105,8 @@ The dashboard uses `@st.cache_data(ttl=360)` for performance optimization, cachi
 - Interactive comparison charts
 - Real-time TradingView integration
 
+---
+
 ## 🚦 Quick Start
 
 ### Prerequisites
@@ -123,6 +137,8 @@ The dashboard uses `@st.cache_data(ttl=360)` for performance optimization, cachi
 
 That's it! Your dashboard will start updating automatically.
 
+---
+
 ## 📊 Dashboard Features
 
 ### Market Overview
@@ -139,6 +155,8 @@ That's it! Your dashboard will start updating automatically.
 - **Responsive Layout**: Works on desktop, tablet, and mobile
 - **Dark Theme**: Easy on the eyes for extended viewing
 - **Smooth Animations**: Professional UI transitions
+
+---
 
 ## 💻 Local Development
 
@@ -162,6 +180,8 @@ cd analysis/local-automation
 python csv_collector.py
 ```
 
+---
+
 ## ⚙️ Configuration
 
 ### Environment Variables
@@ -182,6 +202,8 @@ Change the limit in `cmc_latest_data_puller.py`:
 ```python
 raw_data = fetch_data(limit=200)  # Fetch top 200 coins
 ```
+
+---
 
 ## 📈 Data Analysis Workflow
 
@@ -206,12 +228,16 @@ df['volatility'] = df['percent_change_24h'].abs()
 top_volatile = df.nlargest(10, 'volatility')
 ```
 
+---
+
 ## ⚠️ Current Limitations
 
 1. **Update Frequency**: Limited to 6-minute intervals (GitHub Actions constraint)
 2. **Historical Data**: Dashboard shows only current snapshot (use local workflow for historical analysis)
 3. **API Rate Limits**: Free tier limits may apply for heavy usage
 4. **Data Gaps**: Local collection depends on machine uptime
+
+---
 
 ## 🚀 Future Enhancements
 
@@ -221,6 +247,8 @@ top_volatile = df.nlargest(10, 'volatility')
 - **Machine Learning**: Price prediction models using historical data
 - **Portfolio Tracking**: Personal portfolio management features
 - **Multi-exchange Support**: Aggregate data from multiple exchanges
+
+---
 
 ## 🤝 Contributing
 
@@ -232,9 +260,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - Update documentation for API changes
 - Create feature branches from `main`
 
+---
+
 ## 📝 License
 
 MIT License - feel free to use this project for personal or commercial purposes.
+
+---
 
 ## 🙏 Acknowledgments
 
@@ -243,9 +275,11 @@ MIT License - feel free to use this project for personal or commercial purposes.
 - GitHub Actions for free CI/CD
 - TradingView for embeddable charts
 
+---
+
 ## 📧 Contact
 
-For questions or suggestions, please open an issue or contact via GitHub.
+For questions or suggestions, please open an issue or contact via [LinkedIn](https://www.linkedin.com/in/michaelvincentsebastian/) 😄.
 
 ---
 
